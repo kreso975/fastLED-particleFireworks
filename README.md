@@ -1,5 +1,5 @@
 # fastLED-particleFireworks
- Simple Arduino Project fastLED Fireworks Scroll Text LED matrix 8x32  
+ Simple Arduino Project fastLED Fireworks Scroll Text WS2812B LED matrix 8x32  
  [![Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/kreso975)  
   
 Tested with ESP01S - 1M, 160MHz
