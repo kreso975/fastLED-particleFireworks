@@ -1,12 +1,17 @@
-
 void drawText( CRGB* buffer )
 {
 	static uint8_t brightness = 30;
 	static bool increasing = true;
 
 	// Draw flipped "WIN" in the center with varying brightness
-	CRGB color = CRGB(255, 0, 0);
-	color.nscale8(brightness);
+	static CRGB color = CRGB(255, 0, 0);
+	static uint8_t lastBrightness = 30;
+	if (brightness != lastBrightness)
+	{
+		color = CRGB(255, 0, 0);
+		color.nscale8(brightness);
+		lastBrightness = brightness;
+	}
 
 	// W
 	for (int y = 1; y < 7; y++)

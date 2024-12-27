@@ -111,8 +111,9 @@ public:
 		this->x = x;
 		this->y = y;
 		this->color = color;
-		this->xvel = random(-100, 100) / (100.0 / INITIAL_VELOCITY); // Use global initial velocity
-		this->yvel = random(-100, 100) / (100.0 / INITIAL_VELOCITY); // Use global initial velocity
+		float velocityFactor = 100.0 / INITIAL_VELOCITY;
+		this->xvel = random(-100, 100) / velocityFactor; // Use global initial velocity
+		this->yvel = random(-100, 100) / velocityFactor; // Use global initial velocity
 		this->life = PARTICLE_LIFE;									 // Use global particle life
 	}
 
@@ -137,7 +138,7 @@ public:
 		y += yvel;
 
 		// Mark particle as dead if out of bounds
-		if ( x < 0 || x > kMatrixWidth || y < 0 || y > kMatrixHeight )
+		if ( x < 0 || x >= kMatrixWidth || y < 0 || y >= kMatrixHeight )
 			life = -1;
 	}
 
@@ -171,7 +172,7 @@ unsigned long previousMillis = 0;
 void loop()
 {
     unsigned long currentMillis = millis();
-		FastLED.clear();
+	FastLED.clear();
 
     // Switch between drawText and displayMessage every 20 seconds
     if ( currentMillis - previousMillisSwitch >= switchInterval )
@@ -180,7 +181,7 @@ void loop()
       showText = !showText; // Toggle between true and false
     }
 		
-		if ( showText )
+	if ( showText )
     {
       // Update drawText at its own interval
       if ( currentMillis - previousMillisText >= intervalText )
@@ -202,20 +203,21 @@ void loop()
       }
       memset( tempBufferText, 0, sizeof(tempBufferText) ); // Clear temp buffer for drawText
     }
-		// Update addParticles at its own interval
-		if ( currentMillis - previousMillisParticles >= intervalParticles )
-		{
-			previousMillisParticles = currentMillis;
-			memset( tempBufferParticles, 0, sizeof(tempBufferParticles) ); // Clear temp buffer
-			addParticles( tempBufferParticles ); // Update temp buffer
-		}
-		
-		// Combine buffers
-		for (int i = 0; i < NUM_LEDS; i++)
-		{
-			leds[i] = tempBufferText[i] + tempBufferMessage[i] + tempBufferParticles[i]; // Combine buffers - tempBufferText[i] + tempBufferMessage
-		}
-		FastLED.show();
+	
+	// Update addParticles at its own interval
+	if ( currentMillis - previousMillisParticles >= intervalParticles )
+	{
+		previousMillisParticles = currentMillis;
+		memset( tempBufferParticles, 0, sizeof(tempBufferParticles) ); // Clear temp buffer
+		addParticles( tempBufferParticles ); // Update temp buffer
+	}
+	
+	// Combine buffers
+	for (int i = 0; i < NUM_LEDS; i++)
+	{
+		leds[i] = tempBufferText[i] + tempBufferMessage[i] + tempBufferParticles[i]; // Combine buffers - tempBufferText[i] + tempBufferMessage
+	}
+	FastLED.show();
 }
 
 
