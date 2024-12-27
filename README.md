@@ -14,4 +14,4 @@ const int UPDATE_RATE = 50;
   
 
 
-[![Watch the video](https://img.youtube.com/vi/SfeN_1HMGKc/0.jpg)](https://www.youtube.com/v=SfeN_1HMGKc)
+[![Watch the video](https://img.youtube.com/vi/SfeN_1HMGKc/0.jpg)](https://www.youtube.com/watch?v=SfeN_1HMGKc)
