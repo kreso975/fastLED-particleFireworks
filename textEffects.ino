@@ -1,66 +1,63 @@
-void drawText( CRGB* buffer )
+const byte W_coords[][2] = {
+  {23, 1}, {23, 2}, {23, 3}, {23, 4}, {23, 5}, {23, 6},
+  {22, 1}, {22, 2}, {22, 3}, {22, 4}, {22, 5}, {22, 6},
+  {18, 1}, {18, 2}, {18, 3}, {18, 4}, {18, 5}, {18, 6},
+  {17, 1}, {17, 2}, {17, 3}, {17, 4}, {17, 5}, {17, 6},
+  {21, 5}, {21, 4}, {20, 4}, {20, 3}, {19, 5}, {19, 4}
+};
+
+const byte I_coords[][2] = {
+  {15, 1}, {15, 2}, {15, 3}, {15, 4}, {15, 5}, {15, 6},
+  {14, 1}, {14, 2}, {14, 3}, {14, 4}, {14, 5}, {14, 6}
+};
+
+const byte N_coords[][2] = {
+  {12, 1}, {12, 2}, {12, 3}, {12, 4}, {12, 5}, {12, 6},
+  {11, 1}, {11, 2}, {11, 3}, {11, 4}, {11, 5}, {11, 6},
+  {8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5}, {8, 6},
+  {7, 1}, {7, 2}, {7, 3}, {7, 4}, {7, 5}, {7, 6},
+  {10, 3}, {10, 4}, {9, 4}, {9, 5}
+};
+
+void drawLetter(const byte coords[][2], int size, CRGB* buffer, CRGB color) {
+  for (int i = 0; i < size; i++) {
+    buffer[XYsafe(coords[i][0], coords[i][1])] = color;
+  }
+}
+
+void drawText(CRGB* buffer)
 {
-	static uint8_t brightness = 30;
-	static bool increasing = true;
+  static uint8_t brightness = 30;
+  static bool increasing = true;
 
-	// Draw flipped "WIN" in the center with varying brightness
-	static CRGB color = CRGB(255, 0, 0);
-	static uint8_t lastBrightness = 30;
-	if (brightness != lastBrightness)
-	{
-		color = CRGB(255, 0, 0);
-		color.nscale8(brightness);
-		lastBrightness = brightness;
-	}
+  // Draw flipped "WIN" in the center with varying brightness
+  static CRGB color = CRGB(255, 0, 0);
+  static uint8_t lastBrightness = 30;
+  if ( brightness != lastBrightness )
+  {
+    color = CRGB(255, 0, 0);
+    color.nscale8(brightness);
+    lastBrightness = brightness;
+  }
 
-	// W
-	for (int y = 1; y < 7; y++)
-	{
-		buffer[XYsafe(23, y)] = color;
-		buffer[XYsafe(22, y)] = color;
-		buffer[XYsafe(18, y)] = color;
-		buffer[XYsafe(17, y)] = color;
-	}
-	buffer[XYsafe(21, 5)] = color;
-	buffer[XYsafe(21, 4)] = color;
-	buffer[XYsafe(20, 4)] = color;
-	buffer[XYsafe(20, 3)] = color;
-	buffer[XYsafe(19, 5)] = color;
-	buffer[XYsafe(19, 4)] = color;
+  // Draw letters using the optimized function
+  drawLetter(W_coords, sizeof(W_coords) / sizeof(W_coords[0]), buffer, color);
+  drawLetter(I_coords, sizeof(I_coords) / sizeof(I_coords[0]), buffer, color);
+  drawLetter(N_coords, sizeof(N_coords) / sizeof(N_coords[0]), buffer, color);
 
-	// I
-	for (int y = 1; y < 7; y++)
-	{
-		buffer[XYsafe(15, y)] = color;
-		buffer[XYsafe(14, y)] = color;
-	}
-
-	// N
-	for (int y = 1; y < 7; y++)
-	{
-		buffer[XYsafe(12, y)] = color;
-		buffer[XYsafe(11, y)] = color;
-		buffer[XYsafe(8, y)] = color;
-		buffer[XYsafe(7, y)] = color;
-	}
-	buffer[XYsafe(10, 3)] = color;
-	buffer[XYsafe(10, 4)] = color;
-	buffer[XYsafe(9, 4)] = color;
-	buffer[XYsafe(9, 5)] = color;
-
-	// Adjust brightness
-	if (increasing)
-	{
-		brightness += 20;
-		if (brightness >= 255)
-			increasing = false;
-	}
-	else
-	{
-		brightness -= 20;
-		if (brightness <= 40)
-			increasing = true;
-	}
+  // Adjust brightness
+  if ( increasing )
+  {
+    brightness += 20;
+    if ( brightness >= 255 )
+      increasing = false;
+  }
+  else
+  {
+    brightness -= 20;
+    if ( brightness <= 40 )
+      increasing = true;
+  }
 }
 
 String convertToSingleByte(String input)
